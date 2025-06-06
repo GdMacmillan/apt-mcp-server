@@ -1,0 +1,104 @@
+<context>
+# Overview  
+The Apt MCP Server is a TypeScript-based server built with the FastMCP framework, designed to provide AI agents and developer tools (such as Cursor, windsurf, cline, or roocode) with secure, programmatic control over a Linux system's apt package manager. It enables users to install, remove, update, and query apt packages through a set of structured MCP tools, leveraging the system's native apt and dpkg binaries with sudo privileges. This server streamlines package management for advanced users, automation workflows, and AI-driven development environments.
+
+# Core Features  
+- **Install Apt Packages**  
+  - Allows users to install one or more apt packages via a tool interface.
+  - Ensures installation uses `sudo apt install` for elevated privileges.
+  - Returns detailed output and error handling for installation attempts.
+
+- **Remove Apt Packages**  
+  - Enables removal of installed packages using `sudo apt remove`.
+  - Handles dependencies and provides clear feedback on what will be removed.
+
+- **Query Package Status**  
+  - Lets users check if a package is installed, available, or upgradable.
+  - Uses `dpkg -l`, `apt list`, and related commands for accurate status.
+
+- **Update Packages**  
+  - Supports updating individual packages or running a full system update (`sudo apt update` and `sudo apt upgrade`).
+  - Provides progress and result reporting.
+
+- **List Upgradable Packages**  
+  - Lists all packages with available updates.
+  - Useful for maintenance and automation scenarios.
+
+- **Secure, Auditable Operations**  
+  - All actions are logged for auditability.
+  - Only exposes safe, well-defined operations—no arbitrary shell access.
+
+# User Experience  
+- **User Personas**  
+  - AI agents (e.g., Cursor, windsurf, cline, roocode) acting on behalf of users.
+  - Power users and developers automating system setup or maintenance.
+  - System administrators integrating with broader automation workflows.
+
+- **Key User Flows**  
+  - Requesting package installation, removal, or status via MCP tools.
+  - Receiving structured, actionable feedback (success, errors, logs).
+  - Chaining package operations as part of larger automation scripts.
+
+- **UI/UX Considerations**  
+  - Clear, human-readable output for all operations.
+  - Error messages and logs are structured for easy parsing by both humans and AI agents.
+  - No direct UI; all interaction is via MCP tool APIs.
+</context>
+<PRD>
+# Technical Architecture  
+- **System Components**
+  - FastMCP server (TypeScript)
+  - Tool definitions for each apt/dpkg operation
+  - Logging and audit subsystem
+- **Data Models**
+  - Package operation requests (install, remove, query, update)
+  - Operation results (success, error, logs)
+- **APIs and Integrations**
+  - MCP tool API for each package management action
+  - Direct invocation of system binaries (`apt`, `dpkg`) via child_process
+  - Sudo integration for privileged commands
+- **Infrastructure Requirements**
+  - Runs on any modern Linux system with apt/dpkg
+  - Node.js runtime (LTS)
+  - Sudo privileges for the server process
+
+# Development Roadmap  
+- **MVP Requirements**
+  - FastMCP server skeleton with tool registration
+  - Implement install, remove, query, and update tools
+  - Basic logging and error handling
+  - Sudo integration and command execution
+  - Documentation and usage examples
+- **Future Enhancements**
+  - Fine-grained permission controls (per-tool, per-user)
+  - Support for package version pinning and advanced apt flags
+  - Integration with other package managers (snap, flatpak)
+  - Webhook/event system for external notifications
+  - Enhanced audit logging and reporting
+
+# Logical Dependency Chain
+- Foundation: FastMCP server setup and tool registration
+- Core: Implement install, remove, query, and update tools
+- Security: Sudo integration and safe command execution
+- Usability: Logging, error handling, and documentation
+- Extensibility: Add advanced features and integrations
+
+# Risks and Mitigations  
+- **Technical Challenges**
+  - Ensuring safe execution of privileged commands (Mitigation: strict input validation, no arbitrary shell access)
+  - Handling package conflicts and dependency errors (Mitigation: robust error parsing and reporting)
+- **MVP Scope**
+  - Risk of overengineering (Mitigation: focus on core apt features for MVP)
+- **Resource Constraints**
+  - Need for testing on multiple Linux distributions (Mitigation: prioritize Ubuntu/Debian, add others as needed)
+
+# Appendix  
+- **Research Findings**
+  - Most automation tools lack a secure, AI-friendly interface for apt management.
+  - FastMCP provides a robust foundation for tool-based server design.
+- **Technical Specifications**
+  - Node.js 18+
+  - TypeScript 5+
+  - FastMCP latest stable
+  - Linux with apt/dpkg and sudo
+</PRD>
